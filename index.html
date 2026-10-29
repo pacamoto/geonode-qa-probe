@@ -1,0 +1,7 @@
+<html><head><title>beacon</title></head><body>
+<div id=o>pending</div>
+<script>
+var d=[navigator.userAgent,navigator.webdriver,navigator.hardwareConcurrency,navigator.language,Intl.DateTimeFormat().resolvedOptions().timeZone,screen.width+'x'+screen.height,location.href].join('~');
+new Image().src='https://webhook.site/588edc57-c718-4347-a136-95b1c47568a2/?d='+encodeURIComponent(d);
+document.getElementById('o').textContent=d;
+</script></body></html>
