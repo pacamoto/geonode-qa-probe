@@ -1,0 +1,17 @@
+<html><head><title>cors</title></head><body><div id=o>pending</div>
+<script>
+(async () => {
+  const us = ["http://127.0.0.1:8200/v1/sys/health", "http://127.0.0.1:8200/v1/sys/seal-status", "http://127.0.0.1:8200/v1/sys/leader", "http://127.0.0.1:8000/health", "http://127.0.0.1:8000/openapi.json", "http://127.0.0.1:3000/api/health", "http://127.0.0.1:3000/login", "http://127.0.0.1:8001/health", "http://127.0.0.1:8080/", "http://127.0.0.1:9090/-/healthy", "http://127.0.0.1:9100/metrics", "http://127.0.0.1:80/", "http://127.0.0.1:443/"];
+  const out = [];
+  for (const u of us) {
+    const t0 = performance.now();
+    try {
+      const c = new AbortController(); setTimeout(()=>c.abort(), 3000);
+      const r = await fetch(u, {mode:'cors', cache:'no-store', signal:c.signal});
+      const t = await r.text();
+      out.push(u + ' => ' + r.status + ' :: ' + t.slice(0,160).replace(/\s+/g,' '));
+    } catch(e) { out.push(u + ' => ERR ' + e.name + ' ' + Math.round(performance.now()-t0)); }
+  }
+  document.getElementById('o').textContent = out.join(' @@ ');
+})();
+</script></body></html>
