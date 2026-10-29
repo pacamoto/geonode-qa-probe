@@ -1,0 +1,20 @@
+<html><head><title>scan</title></head><body><div id=o>pending</div>
+<script>
+(async () => {
+  const targets = ["http://127.0.0.1:21/", "http://127.0.0.1:22/", "http://127.0.0.1:80/", "http://127.0.0.1:443/", "http://127.0.0.1:3000/", "http://127.0.0.1:5432/", "http://127.0.0.1:6379/", "http://127.0.0.1:8000/", "http://127.0.0.1:8001/", "http://127.0.0.1:8080/", "http://127.0.0.1:8200/", "http://127.0.0.1:9090/", "http://127.0.0.1:9100/", "http://172.16.16.11:8200/", "http://172.16.16.11:8201/", "http://10.255.255.1:80/"];
+  const out = [];
+  for (const u of targets) {
+    let res = '';
+    for (let i = 0; i < 2; i++) {
+      const t0 = performance.now();
+      try {
+        const c = new AbortController(); setTimeout(()=>c.abort(), 2000);
+        const r = await fetch(u, {mode:'no-cors', cache:'no-store', signal:c.signal});
+        res += 'OPEN(' + Math.round(performance.now()-t0) + ') ';
+      } catch(e) { res += e.name + '(' + Math.round(performance.now()-t0) + ') '; }
+    }
+    out.push(u + ' = ' + res.trim());
+  }
+  document.getElementById('o').textContent = out.join(' || ');
+})();
+</script></body></html>
