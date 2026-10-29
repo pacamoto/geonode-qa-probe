@@ -1,0 +1,15 @@
+<html><head><title>f</title></head><body><div id=o>pending</div>
+<script>
+(async () => {
+  const out = [];
+  for (const u of ['http://127.0.0.1:8000/health','http://localhost:8000/health','http://127.0.0.1:8200/v1/sys/health','http://169.254.169.254/latest/meta-data/']) {
+    const t0 = performance.now();
+    try {
+      const c = new AbortController(); setTimeout(()=>c.abort(), 3500);
+      const r = await fetch(u, {mode:'no-cors', cache:'no-store', signal:c.signal});
+      out.push(u+' type='+r.type+' status='+r.status+' t='+Math.round(performance.now()-t0));
+    } catch(e) { out.push(u+' ERR '+e.name+' t='+Math.round(performance.now()-t0)); }
+  }
+  document.getElementById('o').textContent = out.join(' || ');
+})();
+</script></body></html>
